@@ -39,15 +39,10 @@ namespace FinancePlatform.Controllers.v1
         }
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTodoItem(long id, TodoItemDTO todoItemDTO)
+        [HttpPut]
+        public async Task<IActionResult> UpdateTodoItem(TodoItemDTO todoItemDTO)
         {
-            if (id != todoItemDTO.Id)
-            {
-                return BadRequest();
-            }
-
-            var todoItem = await _context.TodoItems.FindAsync(id);
+            var todoItem = await _context.TodoItems.FindAsync(todoItemDTO.Id);
             if (todoItem == null)
             {
                 return NotFound();
@@ -60,7 +55,7 @@ namespace FinancePlatform.Controllers.v1
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) when (!TodoItemExists(id))
+            catch (DbUpdateConcurrencyException) when (!TodoItemExists(todoItemDTO.Id))
             {
                 return NotFound();
             }
